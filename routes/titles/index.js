@@ -7,7 +7,7 @@ const userTitlesRouter = require('./userTitles')
 const axios = require('axios')
 
 router.use('/', userTitlesRouter)
-
+const PAGE_SIZE = 10;
 router.get('/advancedsearch', verifyToken, async (req, res) => {
     const maxYear = parseInt(req.query.maxYear)
     const minYear = parseInt(req.query.maxYear)
@@ -33,7 +33,8 @@ router.get('/advancedsearch', verifyToken, async (req, res) => {
             }
         },
         order: [getSort(params.sort)],
-        limit: params.page * 50,
+        limit: PAGE_SIZE,
+        offset: (params.page - 1) * PAGE_SIZE,
     }).catch(err => res.status(500).send(err))
     res.send({ totalCount: titles.length, titles })
 })
